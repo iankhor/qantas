@@ -1,6 +1,5 @@
 import { testHook, mockAxiosGet } from 'testlib/test-utils';
 import { airportDetails } from 'testlib/fixtures';
-import { wait } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 
 import useFetchAirportDetails from 'hooks/useFetchAirportDetails';

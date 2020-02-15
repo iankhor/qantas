@@ -4,4 +4,6 @@ import App from 'components/App';
 
 const rootElement = document.getElementById('react-app');
 
-render(<App />, rootElement);
+const url = 'https://api.qantas.com/flight/refData/airport';
+
+render(<App url={url} />, rootElement);

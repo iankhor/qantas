@@ -14,18 +14,6 @@ jest.mock('axios', () => ({
 
 describe('App', () => {
   let url;
-  beforeEach(() => {
-    url = 'api.qantas.com/foobar';
-
-    mockAxiosGet({
-      mockAxios: axios,
-      mockUrl: url,
-      successResponse: {
-        status: 200,
-        data: airportDetails
-      }
-    });
-  });
 
   describe('initial page view', () => {
     it('shows loading while fetching airport details', () => {
@@ -35,7 +23,20 @@ describe('App', () => {
     });
   });
 
-  fdescribe('seeing a list of airports', () => {
+  describe('seeing a list of airports when when fetch is successful', () => {
+    beforeEach(() => {
+      url = 'api.qantas.com/foobar';
+
+      mockAxiosGet({
+        mockAxios: axios,
+        mockUrl: url,
+        successResponse: {
+          status: 200,
+          data: airportDetails
+        }
+      });
+    });
+
     it('is rendered as a list', async () => {
       const { getByTestId } = render(<App url={url} />);
       await act(() => wait());
@@ -60,6 +61,41 @@ describe('App', () => {
       const airportNames = getAllByTestId('airport-country').map(li => li.textContent);
 
       expect(airportNames).toEqual(expect.arrayContaining(['Somewhere this world', 'French Polynesia']));
+    });
+
+    it('does not show an error message', async () => {
+      const { queryByText } = render(<App url={url} />);
+      await act(() => wait());
+
+      expect(queryByText('Something went wrong! Please try again')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('seeing a error message when fetch has failed', () => {
+    beforeEach(() => {
+      url = 'api.qantas.com/foobar';
+
+      mockAxiosGet({
+        mockAxios: axios,
+        mockUrl: url,
+        failResponse: {
+          status: 500
+        }
+      });
+    });
+
+    it('shows an error message', async () => {
+      const { queryByText } = render(<App url={url} />);
+      await act(() => wait());
+
+      expect(queryByText('Something went wrong! Please try again')).toBeInTheDocument();
+    });
+
+    it('does not show the list', async () => {
+      const { queryByTestId } = render(<App url={url} />);
+      await act(() => wait());
+
+      expect(queryByTestId('airport-list')).not.toBeInTheDocument();
     });
   });
 });

@@ -12,7 +12,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         include: path.resolve(__dirname, 'src'),
         use: ['babel-loader']
       }
@@ -23,6 +23,7 @@ module.exports = {
     port: 9000
   },
   resolve: {
+    extensions: ['*', '.js', '.jsx'],
     alias: {
       components: `${src}/components`,
       hooks: `${src}/hooks`,

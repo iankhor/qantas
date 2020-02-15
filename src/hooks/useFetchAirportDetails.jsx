@@ -11,11 +11,17 @@ const useFetchAirportDetails = ({ url = '' } = {}) => {
   const fetch = async () => {
     setIsLoading(true);
 
-    const { status, data } = await axios.get(url);
+    try {
+      const { status, data } = await axios.get(url);
 
-    if (status === 200) {
-      setData(data);
-      setIsSuccess(true);
+      if (status === 200) {
+        setData(data);
+        setIsSuccess(true);
+        setIsComplete(true);
+        setIsLoading(false);
+      }
+    } catch (e) {
+      setIsError(true);
       setIsComplete(true);
       setIsLoading(false);
     }

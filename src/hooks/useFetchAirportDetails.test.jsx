@@ -106,7 +106,42 @@ describe('useFetchAirportDetails', () => {
         });
       });
 
-      describe('failed', () => {});
+      describe('failed', () => {
+        beforeEach(async () => {
+          const url = 'api.qantas.com/airports';
+          mockAxiosGet({
+            mockAxios: axios,
+            mockUrl: url,
+            failResponse: { status: 422 }
+          });
+
+          testHook(() => {
+            hooksOpts = useFetchAirportDetails({ url });
+          });
+
+          const [_, fetch] = hooksOpts;
+          await act(() => fetch());
+        });
+
+        it('isError is true', () => {
+          const [{ isError }] = hooksOpts;
+
+          expect(isError).toEqual(true);
+        });
+
+        it('isComplete is true', () => {
+          const [{ isComplete }] = hooksOpts;
+
+          expect(isComplete).toEqual(true);
+        });
+
+        it('other states are false', () => {
+          const [{ isLoading, isSuccess }] = hooksOpts;
+
+          expect(isLoading).toEqual(false);
+          expect(isSuccess).toEqual(false);
+        });
+      });
     });
   });
 });

@@ -8,22 +8,28 @@ const useFetchAirportDetails = ({ url = '' } = {}) => {
   const [isError, setIsError] = useState(false);
   const [data, setData] = useState([]);
 
+  const succeededFetch = data => {
+    setData(data);
+    setIsSuccess(true);
+    setIsComplete(true);
+    setIsLoading(false);
+  };
+
+  const failedFetch = () => {
+    setIsError(true);
+    setIsComplete(true);
+    setIsLoading(false);
+  };
+
   const fetch = async () => {
     setIsLoading(true);
 
     try {
       const { status, data } = await axios.get(url);
 
-      if (status === 200) {
-        setData(data);
-        setIsSuccess(true);
-        setIsComplete(true);
-        setIsLoading(false);
-      }
+      status >= 200 && status < 300 && succeededFetch(data);
     } catch (e) {
-      setIsError(true);
-      setIsComplete(true);
-      setIsLoading(false);
+      failedFetch();
     }
   };
 

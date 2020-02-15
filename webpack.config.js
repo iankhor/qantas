@@ -1,6 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const src = path.resolve(__dirname, 'src');
+
 module.exports = {
   entry: path.resolve(__dirname, 'src/index'),
   output: {
@@ -19,6 +21,14 @@ module.exports = {
   devServer: {
     contentBase: path.resolve(__dirname, 'dist'),
     port: 9000
+  },
+  resolve: {
+    alias: {
+      components: `${src}/components`,
+      hooks: `${src}/hooks`,
+      lib: `${src}/lib`,
+      testlib: `${src}/testlib`
+    }
   },
   plugins: [
     new HtmlWebpackPlugin({

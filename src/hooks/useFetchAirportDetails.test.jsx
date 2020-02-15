@@ -1,4 +1,8 @@
-import { testHook } from 'testlib/test-utils';
+import { testHook, mockAxiosGet } from 'testlib/test-utils';
+import { airportDetails } from 'testlib/fixtures';
+import { wait } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
+
 import useFetchAirportDetails from 'hooks/useFetchAirportDetails';
 import axios from 'axios';
 
@@ -9,6 +13,8 @@ jest.mock('axios', () => ({
 
 describe('useFetchAirportDetails', () => {
   let hooksOpts;
+
+  beforeEach(() => jest.clearAllMocks());
 
   describe('initial states', () => {
     beforeEach(() => {
@@ -24,6 +30,83 @@ describe('useFetchAirportDetails', () => {
       expect(isComplete).toEqual(false);
       expect(isSuccess).toEqual(false);
       expect(isError).toEqual(false);
+    });
+  });
+
+  describe('fetch airport details', () => {
+    describe('while fetching', () => {
+      beforeEach(async () => {
+        testHook(() => {
+          hooksOpts = useFetchAirportDetails();
+        });
+
+        const [_, fetch] = hooksOpts;
+        await act(() => fetch());
+      });
+
+      it('isLoading is true', () => {
+        const [{ isLoading }] = hooksOpts;
+
+        expect(isLoading).toEqual(true);
+      });
+
+      it('other states are false', () => {
+        const [{ isComplete, isSuccess, isError }] = hooksOpts;
+
+        expect(isComplete).toEqual(false);
+        expect(isSuccess).toEqual(false);
+        expect(isError).toEqual(false);
+      });
+    });
+
+    describe('fetch has completed', () => {
+      describe('successful', () => {
+        beforeEach(async () => {
+          const url = 'api.qantas.com/airports';
+          mockAxiosGet({
+            mockAxios: axios,
+            mockUrl: url,
+            successResponse: {
+              status: 200,
+              data: [{ foo: 'bar' }]
+            }
+          });
+
+          testHook(() => {
+            hooksOpts = useFetchAirportDetails({ url });
+          });
+
+          const [_, fetch] = hooksOpts;
+          await act(() => fetch());
+        });
+
+        it('isSuccess is true', () => {
+          const [{ isSuccess }] = hooksOpts;
+
+          expect(isSuccess).toEqual(true);
+        });
+
+        it('isComplete is true', () => {
+          const [{ isComplete }] = hooksOpts;
+
+          expect(isComplete).toEqual(true);
+        });
+
+        it('other states are false', () => {
+          const [{ isLoading, isError }] = hooksOpts;
+
+          expect(isLoading).toEqual(false);
+          expect(isError).toEqual(false);
+        });
+
+        it('it sets data to the fetched data', () => {
+          const [{ data }] = hooksOpts;
+
+          expect(data).toEqual([{ foo: 'bar' }]);
+        });
+      });
+
+      describe('failed', () => {});
     });
   });
 });

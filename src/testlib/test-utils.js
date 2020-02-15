@@ -13,10 +13,10 @@ export const testHook = (callback, testSetup = () => {}) => {
   render(<TestHook callback={callback} />);
 };
 
-export const mockPostAxios = ({ mockAxios, mockUrl, successResponse = {}, failResponse = {} }) => {
-  mockAxios.post.mockImplementationOnce(url => {
+export const mockAxiosGet = ({ mockAxios, mockUrl, successResponse = {}, failResponse = {} }) => {
+  mockAxios.get.mockImplementationOnce(url => {
     if (url === mockUrl) {
-      Object.keys(successResponse).length ? Promise.resolve(successResponse) : Promise.resolve(failResponse);
+      return Object.keys(successResponse).length ? Promise.resolve(successResponse) : Promise.resolve(failResponse);
     } else {
       return Promise.reject({ status: 400 });
     }

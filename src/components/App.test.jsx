@@ -28,18 +28,38 @@ describe('App', () => {
   });
 
   describe('initial page view', () => {
-    it('shows a loader while fetching airport details', () => {
+    it('shows loading while fetching airport details', () => {
       const { getByText } = render(<App url={url} />);
 
-      expect(getByText('Loading...')).toBeVisible();
+      expect(getByText('Loading...')).toBeInTheDocument();
+    });
+  });
+
+  fdescribe('seeing a list of airports', () => {
+    it('is rendered as a list', async () => {
+      const { getByTestId } = render(<App url={url} />);
+      await act(() => wait());
+
+      const list = getByTestId('airport-list');
+
+      expect(list).toBeVisible();
+      expect(list.children.length).toEqual(2);
     });
 
-    // TODO: simple test to wire things up. to refactor
-    it('shows json payload when fetch is complete', async () => {
-      const { getByText } = render(<App url={url} />);
-
+    it('has airport names', async () => {
+      const { getAllByTestId } = render(<App url={url} />);
       await act(() => wait());
-      expect(getByText('AAA')).toBeVisible();
+      const airportNames = getAllByTestId('airport-name').map(li => li.textContent);
+
+      expect(airportNames).toEqual(expect.arrayContaining(['Anaa', 'Bbbb']));
+    });
+
+    it('has country names', async () => {
+      const { getAllByTestId } = render(<App url={url} />);
+      await act(() => wait());
+      const airportNames = getAllByTestId('airport-country').map(li => li.textContent);
+
+      expect(airportNames).toEqual(expect.arrayContaining(['Somewhere this world', 'French Polynesia']));
     });
   });
 });

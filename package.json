@@ -1,0 +1,10 @@
+{
+  "name": "qantas",
+  "version": "1.0.0",
+  "description": "Code challage: Displaying airports which Qantas operates from",
+  "main": "index.js",
+  "repository": "https://github.com/iankhor/qantas.git",
+  "author": "iankhor <iankhorbc.thecoder@gmail.com>",
+  "license": "MIT",
+  "private": true
+}

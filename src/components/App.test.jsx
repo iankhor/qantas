@@ -2,7 +2,7 @@ import React from 'react';
 import { airportDetails } from 'testlib/fixtures';
 import { mockAxiosGet } from 'testlib/test-utils';
 import { act } from 'react-dom/test-utils';
-import { render, wait } from '@testing-library/react';
+import { render, wait, fireEvent } from '@testing-library/react';
 
 import App from 'components/App';
 import axios from 'axios';
@@ -68,6 +68,18 @@ describe('App', () => {
       await act(() => wait());
 
       expect(queryByText('Something went wrong! Please try again')).not.toBeInTheDocument();
+    });
+
+    it('show an airports details when clicked on', async () => {
+      const { queryByTestId, getByTestId, getAllByTestId } = render(<App url={url} />);
+      await act(() => wait());
+
+      const airport = getAllByTestId('airport-name')[0];
+
+      fireEvent.click(airport);
+
+      expect(getByTestId('airport-card')).toBeInTheDocument();
+      expect(queryByTestId('airport-list')).not.toBeInTheDocument();
     });
   });
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import useFetchAirportDetails from 'hooks/useFetchAirportDetails';
+import usePaginator from 'hooks/usePaginator';
 import { Dimmer, Loader, List, Segment, Container, Card, Button } from 'semantic-ui-react';
 
 const ListContainer = ({ airports, airportOnClick, isSuccess }) =>
@@ -33,7 +34,15 @@ const AirportCard = ({ backOnClick }) => (
 
 const App = ({ url }) => {
   const [{ isLoading, isComplete, isSuccess, isError, data }, fetch] = useFetchAirportDetails({ url });
+  const [{ paginatedList }, paginate] = usePaginator();
   const [isViewingAirport, setIsViewAirport] = useState(false);
+
+  // TODO: specs for paginations
+  useEffect(() => {
+    if (isSuccess) {
+      paginate({ list: data });
+    }
+  }, [data, isSuccess]);
 
   const airportOnClick = () => setIsViewAirport(true);
   const backOnClick = () => setIsViewAirport(false);
@@ -50,7 +59,7 @@ const App = ({ url }) => {
         {isViewingAirport ? (
           <AirportCard backOnClick={backOnClick} />
         ) : (
-          <ListContainer airports={data} airportOnClick={airportOnClick} isSuccess={isSuccess} />
+          <ListContainer airports={paginatedList} airportOnClick={airportOnClick} isSuccess={isSuccess} />
         )}
       </Segment>
     </Container>

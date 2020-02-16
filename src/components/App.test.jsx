@@ -44,7 +44,7 @@ describe('App', () => {
       const list = getByTestId('airport-list');
 
       expect(list).toBeVisible();
-      expect(list.children.length).toEqual(2);
+      expect(list.children.length).toEqual(5);
     });
 
     it('has airport names', async () => {
@@ -103,6 +103,43 @@ describe('App', () => {
           expect(queryByTestId('airport-card')).not.toBeInTheDocument();
           expect(queryByTestId('airport-list')).toBeInTheDocument();
         });
+      });
+    });
+
+    describe('pagination of airport list', () => {
+      it('has a pagination navigation bar', async () => {
+        const { getByTestId } = render(<App url={url} />);
+        await act(() => wait());
+
+        const pagination = getByTestId('pagination');
+
+        expect(pagination).toBeVisible();
+      });
+
+      it('has 2 pages on the navigation bar', async () => {
+        // 6 list items, pagination page limit is 5
+        const { queryByText } = render(<App url={url} />);
+        await act(() => wait());
+
+        const pageOne = queryByText('1');
+        const pageTwo = queryByText('2');
+        const pageThree = queryByText('3');
+        const pageFour = queryByText('4');
+
+        expect(pageOne).toBeInTheDocument();
+        expect(pageTwo).toBeInTheDocument();
+        expect(pageThree).not.toBeInTheDocument();
+        expect(pageFour).not.toBeInTheDocument();
+      });
+
+      it('navigates to the second page', async () => {
+        const { getByText, getAllByTestId } = render(<App url={url} />);
+        await act(() => wait());
+
+        fireEvent.click(getByText('⟩'));
+        const airportNames = getAllByTestId('airport-name').map(li => li.textContent);
+
+        expect(airportNames).toEqual(expect.arrayContaining(['FFFb']));
       });
     });
   });

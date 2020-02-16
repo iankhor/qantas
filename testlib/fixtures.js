@@ -3,20 +3,6 @@
 export const airportDetails = [
   {
     airportCode: 'AAA',
-    internationalAirport: false,
-    domesticAirport: false,
-    regionalAirport: false,
-    onlineIndicator: false,
-    eticketableAirport: false,
-    location: {
-      aboveSeaLevel: -99999,
-      latitude: 17.25,
-      latitudeRadius: -0.304,
-      longitude: 145.3,
-      longitudeRadius: -2.5395,
-      latitudeDirection: 'S',
-      longitudeDirection: 'W'
-    },
     airportName: 'Anaa',
     city: {
       cityCode: 'AAA',
@@ -26,28 +12,10 @@ export const airportDetails = [
     country: {
       countryCode: 'PF',
       countryName: 'French Polynesia'
-    },
-    region: {
-      regionCode: 'SP',
-      regionName: 'South Pacific'
     }
   },
   {
     airportCode: 'BBB',
-    internationalAirport: true,
-    domesticAirport: false,
-    regionalAirport: false,
-    onlineIndicator: false,
-    eticketableAirport: false,
-    location: {
-      aboveSeaLevel: -99999,
-      latitude: 17.25,
-      latitudeRadius: -0.304,
-      longitude: 145.3,
-      longitudeRadius: -2.5395,
-      latitudeDirection: 'S',
-      longitudeDirection: 'W'
-    },
     airportName: 'Bbbb',
     city: {
       cityCode: 'BBB',
@@ -57,10 +25,58 @@ export const airportDetails = [
     country: {
       countryCode: 'PF',
       countryName: 'Somewhere this world'
+    }
+  },
+  {
+    airportCode: 'CCC',
+    airportName: 'CCCb',
+    city: {
+      cityCode: 'CCC',
+      cityName: 'CCCb',
+      timeZoneName: 'Pacific/Tahiti'
     },
-    region: {
-      regionCode: 'SP',
-      regionName: 'South Pacific'
+    country: {
+      countryCode: 'PF',
+      countryName: 'Somewhere this world'
+    }
+  },
+  {
+    airportCode: 'DDD',
+    airportName: 'DDDb',
+    city: {
+      cityCode: 'DDD',
+      cityName: 'DDDb',
+      timeZoneName: 'Pacific/Tahiti'
+    },
+    country: {
+      countryCode: 'PF',
+      countryName: 'Somewhere this world'
+    }
+  },
+  {
+    airportCode: 'EEE',
+    airportName: 'EEEb',
+    city: {
+      cityCode: 'EEE',
+      cityName: 'EEEb',
+      timeZoneName: 'Pacific/Tahiti'
+    },
+    country: {
+      countryCode: 'PF',
+      countryName: 'Somewhere this world'
+    }
+  },
+  {
+    airportCode: 'FFF',
+    airportName: 'FFFb',
+    city: {
+      cityCode: 'FFF',
+      cityName: 'FFFb',
+      timeZoneName: 'Pacific/Tahiti'
+    },
+    country: {
+      countryCode: 'PF',
+      countryName: 'Somewhere this world'
     }
   }
 ];

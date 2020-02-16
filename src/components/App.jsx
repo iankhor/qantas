@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import useFetchAirportDetails from 'hooks/useFetchAirportDetails';
 import usePaginator from 'hooks/usePaginator';
-import { Dimmer, Loader, List, Segment, Container, Card, Button } from 'semantic-ui-react';
+import { Pagination, Dimmer, Loader, List, Segment, Container, Card, Button } from 'semantic-ui-react';
 
 const ListContainer = ({ airports, airportOnClick, isSuccess }) =>
   isSuccess && (
@@ -34,10 +34,11 @@ const AirportCard = ({ backOnClick }) => (
 
 const App = ({ url }) => {
   const [{ isLoading, isComplete, isSuccess, isError, data }, fetch] = useFetchAirportDetails({ url });
-  const [{ paginatedList }, paginate] = usePaginator();
+  const [{ paginatedList, totalPages }, paginate] = usePaginator();
   const [isViewingAirport, setIsViewAirport] = useState(false);
 
-  // TODO: specs for paginations
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
     if (isSuccess) {
       paginate({ list: data });
@@ -46,6 +47,11 @@ const App = ({ url }) => {
 
   const airportOnClick = () => setIsViewAirport(true);
   const backOnClick = () => setIsViewAirport(false);
+
+  const pageChange = (e, { activePage }) => {
+    setCurrentPage(activePage);
+    paginate({ list: data, pageNumber: activePage });
+  };
 
   useEffect(() => {
     fetch({ url });
@@ -59,7 +65,10 @@ const App = ({ url }) => {
         {isViewingAirport ? (
           <AirportCard backOnClick={backOnClick} />
         ) : (
-          <ListContainer airports={paginatedList} airportOnClick={airportOnClick} isSuccess={isSuccess} />
+          <Fragment>
+            <ListContainer airports={paginatedList} airportOnClick={airportOnClick} isSuccess={isSuccess} />
+            <Pagination data-testid="pagination" activePage={currentPage} totalPages={totalPages} onPageChange={pageChange} />
+          </Fragment>
         )}
       </Segment>
     </Container>

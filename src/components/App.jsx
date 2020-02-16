@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import useFetchAirportDetails from 'hooks/useFetchAirportDetails';
-import { Dimmer, Loader, List, Segment, Container, Card } from 'semantic-ui-react';
+import { Dimmer, Loader, List, Segment, Container, Card, Button } from 'semantic-ui-react';
 
 const ListContainer = ({ airports, airportOnClick, isSuccess }) =>
   isSuccess && (
@@ -16,13 +16,16 @@ const ListContainer = ({ airports, airportOnClick, isSuccess }) =>
     </List>
   );
 
-const AirportCard = () => (
+const AirportCard = ({ backOnClick }) => (
   <Card.Group>
     <Card data-testid="airport-card">
       <Card.Content>
         <Card.Header>Matthew Harris</Card.Header>
         <Card.Meta>Co-Worker</Card.Meta>
         <Card.Description>Matthew is a pianist living in Nashville.</Card.Description>
+        <Button data-testid="airport-card-back" onClick={backOnClick}>
+          Click Here
+        </Button>
       </Card.Content>
     </Card>
   </Card.Group>
@@ -33,6 +36,7 @@ const App = ({ url }) => {
   const [isViewingAirport, setIsViewAirport] = useState(false);
 
   const airportOnClick = () => setIsViewAirport(true);
+  const backOnClick = () => setIsViewAirport(false);
 
   useEffect(() => {
     fetch({ url });
@@ -43,7 +47,11 @@ const App = ({ url }) => {
       <Segment placeholder={isLoading}>
         <Dimmer active={isLoading}>{isLoading && <Loader indeterminate>Loading...</Loader>}</Dimmer>
         {isError && <Segment>Something went wrong! Please try again</Segment>}
-        {isViewingAirport ? <AirportCard /> : <ListContainer airports={data} airportOnClick={airportOnClick} isSuccess={isSuccess} />}
+        {isViewingAirport ? (
+          <AirportCard backOnClick={backOnClick} />
+        ) : (
+          <ListContainer airports={data} airportOnClick={airportOnClick} isSuccess={isSuccess} />
+        )}
       </Segment>
     </Container>
   );

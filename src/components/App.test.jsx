@@ -70,16 +70,40 @@ describe('App', () => {
       expect(queryByText('Something went wrong! Please try again')).not.toBeInTheDocument();
     });
 
-    it('show an airports details when clicked on', async () => {
-      const { queryByTestId, getByTestId, getAllByTestId } = render(<App url={url} />);
-      await act(() => wait());
+    describe('clicking on an airport on the list', () => {
+      it("shows an airport's details", async () => {
+        const { queryByTestId, getByTestId, getAllByTestId } = render(<App url={url} />);
+        await act(() => wait());
+        const airport = getAllByTestId('airport-name')[0];
+        fireEvent.click(airport);
 
-      const airport = getAllByTestId('airport-name')[0];
+        expect(getByTestId('airport-card')).toBeInTheDocument();
+        expect(queryByTestId('airport-list')).not.toBeInTheDocument();
+      });
 
-      fireEvent.click(airport);
+      it('has a back button', async () => {
+        const { getByTestId, getAllByTestId } = render(<App url={url} />);
+        await act(() => wait());
+        const airport = getAllByTestId('airport-name')[0];
+        fireEvent.click(airport);
 
-      expect(getByTestId('airport-card')).toBeInTheDocument();
-      expect(queryByTestId('airport-list')).not.toBeInTheDocument();
+        expect(getByTestId('airport-card-back')).toBeInTheDocument();
+      });
+
+      describe('clicking on the back button', () => {
+        it('does show the list of airports', async () => {
+          const { queryByTestId, getByTestId, getAllByTestId } = render(<App url={url} />);
+          await act(() => wait());
+
+          const airport = getAllByTestId('airport-name')[0];
+          fireEvent.click(airport);
+          const backButton = getByTestId('airport-card-back');
+          fireEvent.click(backButton);
+
+          expect(queryByTestId('airport-card')).not.toBeInTheDocument();
+          expect(queryByTestId('airport-list')).toBeInTheDocument();
+        });
+      });
     });
   });
 

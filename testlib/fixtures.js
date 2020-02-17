@@ -5,8 +5,8 @@ export const airportDetails = [
     airportCode: 'AAA',
     airportName: 'Anaa',
     city: {
-      cityCode: 'AAA',
-      cityName: 'Anaa',
+      cityCode: 'AAACity',
+      cityName: 'AnaaCityName',
       timeZoneName: 'Pacific/Tahiti'
     },
     country: {

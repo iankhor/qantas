@@ -72,22 +72,28 @@ describe('App', () => {
 
     describe('clicking on an airport on the list', () => {
       it("shows an airport's details", async () => {
-        const { queryByTestId, getByTestId, getAllByTestId } = render(<App url={url} />);
+        const { queryByTestId, getByTestId, getAllByTestId, getByText } = render(<App url={url} />);
         await act(() => wait());
-        const airport = getAllByTestId('airport-name')[0];
+        const airport = getAllByTestId('airport-list-item')[0];
         fireEvent.click(airport);
 
         expect(getByTestId('airport-card')).toBeInTheDocument();
         expect(queryByTestId('airport-list')).not.toBeInTheDocument();
+        expect(queryByTestId('airport-list')).not.toBeInTheDocument();
+
+        expect(getByText('AAA')).toBeInTheDocument();
+        expect(getByText('AnaaCityName, French Polynesia')).toBeInTheDocument();
+        expect(getByText('Timezone: Pacific/Tahiti')).toBeInTheDocument();
       });
 
       it('has a back button', async () => {
-        const { getByTestId, getAllByTestId } = render(<App url={url} />);
+        const { getByTestId, getByText, getAllByTestId } = render(<App url={url} />);
         await act(() => wait());
-        const airport = getAllByTestId('airport-name')[0];
+        const airport = getAllByTestId('airport-list-item')[0];
         fireEvent.click(airport);
 
         expect(getByTestId('airport-card-back')).toBeInTheDocument();
+        expect(getByText('Back to airport list')).toBeInTheDocument();
       });
 
       describe('clicking on the back button', () => {
@@ -95,7 +101,7 @@ describe('App', () => {
           const { queryByTestId, getByTestId, getAllByTestId } = render(<App url={url} />);
           await act(() => wait());
 
-          const airport = getAllByTestId('airport-name')[0];
+          const airport = getAllByTestId('airport-list-item')[0];
           fireEvent.click(airport);
           const backButton = getByTestId('airport-card-back');
           fireEvent.click(backButton);

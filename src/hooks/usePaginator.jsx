@@ -4,7 +4,7 @@ const PAGE_LIMIT = 5;
 
 const usePaginator = () => {
   const [paginatedList, setPaginatedList] = useState([]);
-  const [totalPages, setTotalPages] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
 
   const paginate = ({ list, pageNumber }) => {
     const tempPageNumber = pageNumber || 1;

@@ -11,7 +11,7 @@ const AirportCard = ({
   }
 }) => (
   <Card.Group>
-    <Card data-testid="airport-card">
+    <Card data-testid="airport-card" centered>
       <Card.Content>
         <Card.Header>{airportName}</Card.Header>
         <Card.Meta>{airportCode}</Card.Meta>

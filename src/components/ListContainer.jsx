@@ -1,9 +1,14 @@
 import React, { Fragment } from 'react';
-import { Pagination, List } from 'semantic-ui-react';
+import { Pagination, List, Segment, Header, Icon } from 'semantic-ui-react';
 
 const ListContainer = ({ airports, airportOnClick, isSuccess, currentPage, totalPages, pageChange }) =>
   isSuccess && (
     <Fragment>
+      <Header as="h2" icon textAlign="center">
+        <Icon name="plane" />
+        Airports
+        <Header.Subheader>Click on an airport to find out more details.</Header.Subheader>
+      </Header>
       <List data-testid="airport-list" divided verticalAlign="middle">
         {airports.map(({ airportCode, airportName, country: { countryName } }) => {
           return (
@@ -18,7 +23,9 @@ const ListContainer = ({ airports, airportOnClick, isSuccess, currentPage, total
           );
         })}
       </List>
-      <Pagination data-testid="pagination" activePage={currentPage} totalPages={totalPages} onPageChange={pageChange} />
+      <Segment textAlign="center" basic>
+        <Pagination data-testid="pagination" activePage={currentPage} totalPages={totalPages} onPageChange={pageChange} />
+      </Segment>
     </Fragment>
   );
 

@@ -37,41 +37,25 @@ describe('App', () => {
       });
     });
 
-    it('is rendered as a list', async () => {
-      const { getByTestId } = render(<App url={url} />);
+    it('sees a list of airports', async () => {
+      const { getByTestId, getAllByTestId, queryByText } = render(<App url={url} />);
       await act(() => wait());
 
       const list = getByTestId('airport-list');
+      const airportNames = getAllByTestId('airport-name').map(li => li.textContent);
+      const countryNames = getAllByTestId('airport-country').map(li => li.textContent);
+      const pagination = getByTestId('pagination');
 
       expect(list).toBeVisible();
       expect(list.children.length).toEqual(5);
-    });
-
-    it('has airport names', async () => {
-      const { getAllByTestId } = render(<App url={url} />);
-      await act(() => wait());
-      const airportNames = getAllByTestId('airport-name').map(li => li.textContent);
-
+      expect(pagination).toBeVisible();
       expect(airportNames).toEqual(expect.arrayContaining(['Anaa', 'Bbbb']));
-    });
-
-    it('has country names', async () => {
-      const { getAllByTestId } = render(<App url={url} />);
-      await act(() => wait());
-      const airportNames = getAllByTestId('airport-country').map(li => li.textContent);
-
-      expect(airportNames).toEqual(expect.arrayContaining(['Somewhere this world', 'French Polynesia']));
-    });
-
-    it('does not show an error message', async () => {
-      const { queryByText } = render(<App url={url} />);
-      await act(() => wait());
-
+      expect(countryNames).toEqual(expect.arrayContaining(['Somewhere this world', 'French Polynesia']));
       expect(queryByText('Something went wrong! Please try again')).not.toBeInTheDocument();
     });
 
-    describe('clicking on an airport on the list', () => {
-      it("shows an airport's details", async () => {
+    describe('clicking on an airport on the list and returning to the airport list', () => {
+      it("shows an airport's details and then returns to the airport list", async () => {
         const { queryByTestId, getByTestId, getAllByTestId, getByText } = render(<App url={url} />);
         await act(() => wait());
         const airport = getAllByTestId('airport-list-item')[0];
@@ -84,31 +68,17 @@ describe('App', () => {
         expect(getByText('AAA')).toBeInTheDocument();
         expect(getByText('AnaaCityName, French Polynesia')).toBeInTheDocument();
         expect(getByText('Timezone: Pacific/Tahiti')).toBeInTheDocument();
-      });
 
-      it('has a back button', async () => {
-        const { getByTestId, getByText, getAllByTestId } = render(<App url={url} />);
-        await act(() => wait());
-        const airport = getAllByTestId('airport-list-item')[0];
         fireEvent.click(airport);
 
         expect(getByTestId('airport-card-back')).toBeInTheDocument();
         expect(getByText('Back to airport list')).toBeInTheDocument();
-      });
 
-      describe('clicking on the back button', () => {
-        it('does show the list of airports', async () => {
-          const { queryByTestId, getByTestId, getAllByTestId } = render(<App url={url} />);
-          await act(() => wait());
+        const backButton = getByTestId('airport-card-back');
+        fireEvent.click(backButton);
 
-          const airport = getAllByTestId('airport-list-item')[0];
-          fireEvent.click(airport);
-          const backButton = getByTestId('airport-card-back');
-          fireEvent.click(backButton);
-
-          expect(queryByTestId('airport-card')).not.toBeInTheDocument();
-          expect(queryByTestId('airport-list')).toBeInTheDocument();
-        });
+        expect(queryByTestId('airport-card')).not.toBeInTheDocument();
+        expect(queryByTestId('airport-list')).toBeInTheDocument();
       });
     });
 

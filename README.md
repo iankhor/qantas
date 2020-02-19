@@ -1,3 +1,20 @@
+# ;TLDR
+
+Deployed app is at [https://qantasairports.herokuapp.com/](https://qantasairports.herokuapp.com/)
+
+## Instructions
+
+1. Clone this repo
+1. run `yarn install`
+1. run `yarn dev`
+1. On a browser, go to `localhost:9000`
+
+## Tech stack
+
+1. React
+2. [React-SemanticUI](https://github.com/Semantic-Org/Semantic-UI-React)
+3. [React Testing Library](https://github.com/testing-library/react-testing-library)
+
 # Qantas Code Challenge (Web)
 
 ## Brief
